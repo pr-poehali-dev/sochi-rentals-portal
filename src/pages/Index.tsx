@@ -381,10 +381,10 @@ const Index = () => {
                     <div>
                       <h4 className="font-semibold text-gray-800 mb-1">Телефон</h4>
                       <a 
-                        href="tel:+78621234567" 
+                        href="tel:+79654776220" 
                         className="text-lg text-primary font-medium hover:text-primary/80 transition-colors"
                       >
-                        +7 (862) 123-45-67
+                        +7 (965) 477-62-20
                       </a>
                       <p className="text-sm text-gray-600 mt-1">Ежедневно с 9:00 до 21:00</p>
                     </div>
@@ -399,10 +399,10 @@ const Index = () => {
                     <div>
                       <h4 className="font-semibold text-gray-800 mb-1">Email</h4>
                       <a 
-                        href="mailto:info@sochidom.ru" 
+                        href="mailto:shamrina555@mail.ru" 
                         className="text-lg text-primary font-medium hover:text-primary/80 transition-colors"
                       >
-                        info@sochidom.ru
+                        shamrina555@mail.ru
                       </a>
                       <p className="text-sm text-gray-600 mt-1">Ответим в течение 2 часов</p>
                     </div>
@@ -545,7 +545,7 @@ const Index = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="Mail" size={16} />
-                  <span>info@sochidom.ru</span>
+                  <span>shamrina555@mail.ru</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Icon name="MapPin" size={16} />
