@@ -357,6 +357,117 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Contacts Section */}
+      <section className="py-16 bg-gradient-to-r from-primary/5 to-accent/5">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold font-heading text-gray-800 mb-4">
+                Свяжитесь с нами
+              </h3>
+              <p className="text-gray-600">
+                Готовы помочь найти идеальное жилье или ответить на ваши вопросы
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Contact Cards */}
+              <div className="space-y-6">
+                <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-primary/10 p-3 rounded-full">
+                      <Icon name="Phone" size={24} className="text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-1">Телефон</h4>
+                      <a 
+                        href="tel:+78621234567" 
+                        className="text-lg text-primary font-medium hover:text-primary/80 transition-colors"
+                      >
+                        +7 (862) 123-45-67
+                      </a>
+                      <p className="text-sm text-gray-600 mt-1">Ежедневно с 9:00 до 21:00</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-accent/10 p-3 rounded-full">
+                      <Icon name="Mail" size={24} className="text-accent" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-1">Email</h4>
+                      <a 
+                        href="mailto:info@sochidom.ru" 
+                        className="text-lg text-primary font-medium hover:text-primary/80 transition-colors"
+                      >
+                        info@sochidom.ru
+                      </a>
+                      <p className="text-sm text-gray-600 mt-1">Ответим в течение 2 часов</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-secondary/10 p-3 rounded-full">
+                      <Icon name="MessageCircle" size={24} className="text-secondary" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-1">Поддержка 24/7</h4>
+                      <p className="text-lg text-primary font-medium">Чат на сайте</p>
+                      <p className="text-sm text-gray-600 mt-1">Мгновенные ответы на вопросы</p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              {/* Quick Contact Form */}
+              <Card className="p-6">
+                <h4 className="text-xl font-semibold text-gray-800 mb-4">Быстрая связь</h4>
+                <div className="space-y-4">
+                  <Input placeholder="Ваше имя" />
+                  <Input placeholder="Телефон" type="tel" />
+                  <Input placeholder="Email" type="email" />
+                  <textarea 
+                    placeholder="Ваш вопрос или пожелания..."
+                    className="w-full p-3 border rounded-md resize-none h-24 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  />
+                  <Button className="w-full">
+                    <Icon name="Send" size={16} className="mr-2" />
+                    Отправить сообщение
+                  </Button>
+                  <p className="text-xs text-gray-500 text-center">
+                    Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
+                  </p>
+                </div>
+              </Card>
+            </div>
+
+            {/* Additional Info */}
+            <div className="mt-12 text-center">
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center justify-center space-x-8 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2">
+                    <Icon name="Clock" size={16} />
+                    <span>Быстрый ответ</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Icon name="Shield" size={16} />
+                    <span>Безопасные сделки</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Icon name="Users" size={16} />
+                    <span>Проверенные владельцы</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
