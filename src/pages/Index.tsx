@@ -8,6 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
@@ -15,6 +16,70 @@ const Index = () => {
   const [propertyType, setPropertyType] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
   const [district, setDistrict] = useState('all');
+  const [selectedProperty, setSelectedProperty] = useState<any>(null);
+  const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
+  const [guests, setGuests] = useState(1);
+  
+  // Генерируем занятые даты для каждого объекта
+  const generateBookedDates = (propertyId: number) => {
+    const bookedDates: Date[] = [];
+    const today = new Date();
+    
+    // Случайно генерируем занятые периоды
+    for (let i = 0; i < 60; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      
+      // Случайная логика для занятых дат (разная для каждого объекта)
+      const hash = (propertyId * 17 + i) % 100;
+      if (hash < 25) { // 25% вероятность что дата занята
+        bookedDates.push(date);
+      }
+    }
+    
+    return bookedDates;
+  };
+  
+  const getAvailableDates = (propertyId: number) => {
+    const bookedDates = generateBookedDates(propertyId);
+    const today = new Date();
+    const availableDates: Date[] = [];
+    
+    for (let i = 0; i < 60; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      
+      const isBooked = bookedDates.some(bookedDate => 
+        bookedDate.toDateString() === date.toDateString()
+      );
+      
+      if (!isBooked) {
+        availableDates.push(date);
+      }
+    }
+    
+    return availableDates;
+  };
+  
+  const isDateBooked = (date: Date, propertyId: number) => {
+    const bookedDates = generateBookedDates(propertyId);
+    return bookedDates.some(bookedDate => 
+      bookedDate.toDateString() === date.toDateString()
+    );
+  };
+  
+  const calculateTotalPrice = (property: any, checkIn: Date, checkOut: Date) => {
+    if (!checkIn || !checkOut) return 0;
+    const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+    return nights * property.price;
+  };
+  
+  const formatDateRange = (checkIn: Date | undefined, checkOut: Date | undefined) => {
+    if (!checkIn || !checkOut) return 'Выберите даты';
+    const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+    return `${checkIn.toLocaleDateString('ru-RU')} - ${checkOut.toLocaleDateString('ru-RU')} (${nights} ${nights === 1 ? 'ночь' : nights < 5 ? 'ночи' : 'ночей'})`;
+  };
 
   const properties = [
     {
@@ -30,7 +95,8 @@ const Index = () => {
       area: 65,
       amenities: ['Wi-Fi', 'Кондиционер', 'Балкон'],
       owner: 'Анна С.',
-      verified: true
+      verified: true,
+      maxGuests: 4
     },
     {
       id: 2,
@@ -45,7 +111,8 @@ const Index = () => {
       area: 35,
       amenities: ['Wi-Fi', 'Кухня', 'Близко к пляжу'],
       owner: 'Дмитрий К.',
-      verified: true
+      verified: true,
+      maxGuests: 2
     },
     {
       id: 3,
@@ -60,7 +127,8 @@ const Index = () => {
       area: 180,
       amenities: ['Бассейн', 'Сад', 'Парковка', 'Вид на горы'],
       owner: 'Михаил В.',
-      verified: true
+      verified: true,
+      maxGuests: 8
     }
   ];
 
@@ -330,7 +398,7 @@ const Index = () => {
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between mb-3 sm:mb-0">
+                  <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2 flex-1 min-w-0">
                       <Avatar className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0">
                         <AvatarFallback className="text-xs">{property.owner[0]}</AvatarFallback>
@@ -345,6 +413,274 @@ const Index = () => {
                     <div className="text-right flex-shrink-0">
                       <div className="text-lg sm:text-2xl font-bold text-primary">{property.price}₽</div>
                       <div className="text-xs text-gray-500">за ночь</div>
+                    </div>
+                  </div>
+                  
+                  {/* Booking Section */}
+                  <div className="space-y-3">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button 
+                          className="w-full" 
+                          onClick={() => {
+                            setSelectedProperty(property);
+                            setCheckInDate(undefined);
+                            setCheckOutDate(undefined);
+                            setGuests(1);
+                          }}
+                        >
+                          <Icon name="Calendar" size={16} className="mr-2" />
+                          Проверить свободные даты
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl">
+                        <DialogHeader>
+                          <DialogTitle className="text-xl font-bold">
+                            Бронирование: {property.title}
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {/* Calendar Section */}
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-semibold mb-2">Выберите даты</h4>
+                              <p className="text-sm text-gray-600 mb-4">
+                                Выберите даты заезда и выезда. Занятые даты выделены серым.
+                              </p>
+                              
+                              {/* Calendar Legend */}
+                              <div className="flex flex-wrap gap-4 mb-4 text-xs">
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-4 h-4 bg-primary rounded"></div>
+                                  <span>Выбранные даты</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-4 h-4 bg-gray-100 border rounded"></div>
+                                  <span>Занято</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-4 h-4 bg-accent rounded"></div>
+                                  <span>Сегодня</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-4 h-4 border rounded"></div>
+                                  <span>Доступно</span>
+                                </div>
+                              </div>
+                              
+                              <Calendar
+                                mode="range"
+                                selected={{
+                                  from: checkInDate,
+                                  to: checkOutDate,
+                                }}
+                                onSelect={(range) => {
+                                  if (range?.from) setCheckInDate(range.from);
+                                  if (range?.to) setCheckOutDate(range.to);
+                                }}
+                                disabled={(date) => {
+                                  const today = new Date();
+                                  today.setHours(0, 0, 0, 0);
+                                  return date < today || isDateBooked(date, property.id);
+                                }}
+                                numberOfMonths={2}
+                                className="rounded-md border"
+                              />
+                              
+                              {/* Availability Summary */}
+                              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <Icon name="Info" size={16} className="text-blue-600" />
+                                  <span className="text-sm font-medium text-blue-800">Доступность</span>
+                                </div>
+                                <div className="text-sm text-blue-700">
+                                  <p>• Свободно: {getAvailableDates(property.id).length} дней в ближайшие 2 месяца</p>
+                                  <p>• Занято: {generateBookedDates(property.id).length} дней</p>
+                                  <p>• Минимальное бронирование: 1 ночь</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Booking Details */}
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-semibold mb-2">Детали бронирования</h4>
+                              
+                              {/* Guests selector */}
+                              <div className="space-y-2 mb-4">
+                                <label className="text-sm font-medium">Количество гостей</label>
+                                <Select value={guests.toString()} onValueChange={(value) => setGuests(parseInt(value))}>
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {Array.from({length: property.maxGuests}, (_, i) => i + 1).map(num => (
+                                      <SelectItem key={num} value={num.toString()}>
+                                        {num} {num === 1 ? 'гость' : num < 5 ? 'гостя' : 'гостей'}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              
+                              {/* Selected dates */}
+                              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Период:</span>
+                                  <span className="text-sm font-medium">{formatDateRange(checkInDate, checkOutDate)}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Гостей:</span>
+                                  <span className="text-sm font-medium">{guests}</span>
+                                </div>
+                                {checkInDate && checkOutDate && (
+                                  <>
+                                    <div className="flex justify-between">
+                                      <span className="text-sm text-gray-600">Цена за ночь:</span>
+                                      <span className="text-sm font-medium">{property.price}₽</span>
+                                    </div>
+                                    <div className="border-t pt-2 flex justify-between">
+                                      <span className="font-semibold">Итого:</span>
+                                      <span className="font-bold text-primary">
+                                        {calculateTotalPrice(property, checkInDate, checkOutDate)}₽
+                                      </span>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                            
+                            {/* Property details */}
+                            <div className="space-y-3">
+                              <div className="flex items-center space-x-2">
+                                <Icon name="MapPin" size={16} className="text-gray-500" />
+                                <span className="text-sm">{property.district}</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Icon name="Home" size={16} className="text-gray-500" />
+                                <span className="text-sm">{property.rooms} комн., {property.area}м²</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Icon name="Users" size={16} className="text-gray-500" />
+                                <span className="text-sm">До {property.maxGuests} гостей</span>
+                              </div>
+                            </div>
+                            
+                            {/* Quick date selections */}
+                            <div className="space-y-2">
+                              <h5 className="text-sm font-medium">Быстрый выбор:</h5>
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => {
+                                    const today = new Date();
+                                    const tomorrow = new Date(today);
+                                    tomorrow.setDate(today.getDate() + 1);
+                                    const dayAfter = new Date(tomorrow);
+                                    dayAfter.setDate(tomorrow.getDate() + 1);
+                                    
+                                    if (!isDateBooked(tomorrow, property.id) && !isDateBooked(dayAfter, property.id)) {
+                                      setCheckInDate(tomorrow);
+                                      setCheckOutDate(dayAfter);
+                                    }
+                                  }}
+                                  className="text-xs"
+                                >
+                                  Завтра (1 ночь)
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => {
+                                    const today = new Date();
+                                    const nextWeek = new Date(today);
+                                    nextWeek.setDate(today.getDate() + 7);
+                                    const endDate = new Date(nextWeek);
+                                    endDate.setDate(nextWeek.getDate() + 2);
+                                    
+                                    setCheckInDate(nextWeek);
+                                    setCheckOutDate(endDate);
+                                  }}
+                                  className="text-xs"
+                                >
+                                  След. неделя
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => {
+                                    const today = new Date();
+                                    const weekend = new Date(today);
+                                    const daysUntilSaturday = (6 - today.getDay()) % 7;
+                                    weekend.setDate(today.getDate() + daysUntilSaturday);
+                                    const sunday = new Date(weekend);
+                                    sunday.setDate(weekend.getDate() + 1);
+                                    
+                                    setCheckInDate(weekend);
+                                    setCheckOutDate(sunday);
+                                  }}
+                                  className="text-xs"
+                                >
+                                  Выходные
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => {
+                                    setCheckInDate(undefined);
+                                    setCheckOutDate(undefined);
+                                  }}
+                                  className="text-xs"
+                                >
+                                  Очистить
+                                </Button>
+                              </div>
+                            </div>
+                            
+                            {/* Action buttons */}
+                            <div className="space-y-2 pt-4">
+                              <Button 
+                                className="w-full" 
+                                disabled={!checkInDate || !checkOutDate}
+                              >
+                                <Icon name="CreditCard" size={16} className="mr-2" />
+                                Забронировать
+                                {checkInDate && checkOutDate && (
+                                  <span className="ml-2 font-bold">
+                                    {calculateTotalPrice(property, checkInDate, checkOutDate)}₽
+                                  </span>
+                                )}
+                              </Button>
+                              <Button variant="outline" className="w-full">
+                                <Icon name="MessageCircle" size={16} className="mr-2" />
+                                Связаться с владельцем
+                              </Button>
+                              
+                              {checkInDate && checkOutDate && (
+                                <div className="text-center pt-2">
+                                  <p className="text-xs text-gray-500">
+                                    При бронировании потребуется депозит 20%
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    
+                    {/* Quick availability info */}
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <span className="flex items-center space-x-1">
+                        <Icon name="Calendar" size={12} />
+                        <span>Свободно в {getAvailableDates(property.id).slice(0, 7).length}/7 дней</span>
+                      </span>
+                      <span className="flex items-center space-x-1">
+                        <Icon name="Users" size={12} />
+                        <span>До {property.maxGuests} гостей</span>
+                      </span>
                     </div>
                   </div>
 
