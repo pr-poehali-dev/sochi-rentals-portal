@@ -101,22 +101,62 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-blue-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3 lg:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Icon name="Home" size={32} className="text-primary" />
-              <h1 className="text-2xl font-bold font-heading text-primary">СочиДом</h1>
+              <Icon name="Home" size={28} className="text-primary sm:size-8" />
+              <h1 className="text-xl sm:text-2xl font-bold font-heading text-primary">СочиДом</h1>
             </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Button variant="ghost">Каталог</Button>
-              <Button variant="ghost">Карта</Button>
-              <Button variant="ghost">Помощь</Button>
+            
+            {/* Mobile menu button */}
+            <div className="md:hidden">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline">
+                  <Button variant="outline" size="sm">
+                    <Icon name="Menu" size={16} />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-sm">
+                  <DialogHeader>
+                    <DialogTitle>Меню</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <Button variant="ghost" className="w-full justify-start">
+                      <Icon name="Search" size={16} className="mr-2" />
+                      Каталог
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start">
+                      <Icon name="Map" size={16} className="mr-2" />
+                      Карта
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start">
+                      <Icon name="HelpCircle" size={16} className="mr-2" />
+                      Помощь
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      <Icon name="User" size={16} className="mr-2" />
+                      Войти
+                    </Button>
+                    <Button className="w-full justify-start bg-primary hover:bg-primary/90">
+                      <Icon name="Plus" size={16} className="mr-2" />
+                      Сдать жилье
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+            
+            {/* Desktop navigation */}
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
+              <Button variant="ghost" className="text-sm lg:text-base">Каталог</Button>
+              <Button variant="ghost" className="text-sm lg:text-base">Карта</Button>
+              <Button variant="ghost" className="text-sm lg:text-base">Помощь</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="lg:size-default">
                     <Icon name="User" size={16} className="mr-2" />
-                    Войти
+                    <span className="hidden lg:inline">Войти</span>
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
@@ -143,9 +183,10 @@ const Index = () => {
                   </Tabs>
                 </DialogContent>
               </Dialog>
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button className="bg-primary hover:bg-primary/90 text-sm lg:text-base" size="sm" className="lg:size-default">
                 <Icon name="Plus" size={16} className="mr-2" />
-                Сдать жилье
+                <span className="hidden lg:inline">Сдать жилье</span>
+                <span className="lg:hidden">Сдать</span>
               </Button>
             </nav>
           </div>
@@ -153,25 +194,25 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10">
+      <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-5xl font-bold font-heading text-gray-800 mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading text-gray-800 mb-4 sm:mb-6">
             Найдите идеальное жилье в Сочи
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
             Более 1000 проверенных объектов для аренды. От уютных студий до роскошных вилл с видом на море.
           </p>
           
           {/* Search Section */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Поиск</label>
+          <div className="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="space-y-2 sm:col-span-2 lg:col-span-1">
+                <label className="text-xs sm:text-sm font-medium text-gray-700">Поиск</label>
                 <Input
                   placeholder="Район, название..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full"
+                  className="w-full text-sm"
                 />
               </div>
               <div className="space-y-2">
@@ -217,28 +258,29 @@ const Index = () => {
                 </Select>
               </div>
             </div>
-            <Button size="lg" className="w-full md:w-auto px-12">
+            <Button size="lg" className="w-full sm:w-auto sm:px-8 lg:px-12">
               <Icon name="Search" size={20} className="mr-2" />
-              Найти жилье
+              <span className="hidden sm:inline">Найти жилье</span>
+              <span className="sm:hidden">Найти</span>
             </Button>
           </div>
         </div>
       </section>
 
       {/* Properties Catalog */}
-      <section className="py-16">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-3xl font-bold font-heading text-gray-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+            <h3 className="text-2xl sm:text-3xl font-bold font-heading text-gray-800">
               Популярные предложения
             </h3>
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <Icon name="Filter" size={16} />
+            <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
+              <Icon name="Filter" size={14} className="sm:size-4" />
               <span>Найдено: {filteredProperties.length} объектов</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {filteredProperties.map((property) => (
               <Card key={property.id} className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="relative">
@@ -254,9 +296,9 @@ const Index = () => {
                     <Icon name="Heart" size={16} className="text-gray-600 hover:text-red-500 cursor-pointer" />
                   </div>
                 </div>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   <div className="flex items-start justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors line-clamp-2">
                       {property.title}
                     </h4>
                     <div className="flex items-center space-x-1">
@@ -265,17 +307,17 @@ const Index = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
                     <div className="flex items-center space-x-1">
-                      <Icon name="MapPin" size={14} />
-                      <span>{property.district}</span>
+                      <Icon name="MapPin" size={12} className="sm:size-14" />
+                      <span className="truncate">{property.district}</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Icon name="Home" size={14} />
+                      <Icon name="Home" size={12} className="sm:size-14" />
                       <span>{property.rooms} комн.</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Icon name="Maximize" size={14} />
+                      <Icon name="Maximize" size={12} className="sm:size-14" />
                       <span>{property.area}м²</span>
                     </div>
                   </div>
@@ -288,20 +330,20 @@ const Index = () => {
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Avatar className="w-8 h-8">
+                  <div className="flex items-center justify-between mb-3 sm:mb-0">
+                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                      <Avatar className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0">
                         <AvatarFallback className="text-xs">{property.owner[0]}</AvatarFallback>
                       </Avatar>
-                      <div className="flex items-center space-x-1">
-                        <span className="text-sm text-gray-600">{property.owner}</span>
+                      <div className="flex items-center space-x-1 min-w-0">
+                        <span className="text-xs sm:text-sm text-gray-600 truncate">{property.owner}</span>
                         {property.verified && (
-                          <Icon name="CheckCircle" size={14} className="text-green-500" />
+                          <Icon name="CheckCircle" size={12} className="text-green-500 flex-shrink-0 sm:size-14" />
                         )}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-primary">{property.price}₽</div>
+                    <div className="text-right flex-shrink-0">
+                      <div className="text-lg sm:text-2xl font-bold text-primary">{property.price}₽</div>
                       <div className="text-xs text-gray-500">за ночь</div>
                     </div>
                   </div>
@@ -498,24 +540,24 @@ const Index = () => {
       </section>
 
       {/* Interactive Map Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 sm:py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold font-heading text-gray-800 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-2xl sm:text-3xl font-bold font-heading text-gray-800 mb-4">
               Карта объектов в Сочи
             </h3>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4">
               Изучите расположение доступного жилья на интерактивной карте города
             </p>
           </div>
           
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <div className="bg-gradient-to-br from-blue-100 to-green-100 rounded-xl h-96 flex items-center justify-center relative overflow-hidden">
+          <div className="bg-white rounded-xl lg:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
+            <div className="bg-gradient-to-br from-blue-100 to-green-100 rounded-lg lg:rounded-xl h-64 sm:h-80 lg:h-96 flex items-center justify-center relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-200/30 to-green-200/30"></div>
               <div className="text-center z-10">
                 <Icon name="Map" size={64} className="text-primary mx-auto mb-4" />
-                <h4 className="text-xl font-semibold text-gray-800 mb-2">Интерактивная карта Сочи</h4>
-                <p className="text-gray-600 mb-6">Здесь будет отображена карта с объектами недвижимости</p>
+                <h4 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Интерактивная карта Сочи</h4>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-4">Здесь будет отображена карта с объектами недвижимости</p>
                 
                 {/* Mock map points */}
                 <div className="absolute top-8 left-8 bg-primary text-white rounded-full p-2 animate-pulse">
@@ -528,9 +570,10 @@ const Index = () => {
                   <Icon name="MapPin" size={16} />
                 </div>
                 
-                <Button variant="outline" className="bg-white/80 backdrop-blur-sm">
-                  <Icon name="Maximize2" size={16} className="mr-2" />
-                  Открыть полную карту
+                <Button variant="outline" className="bg-white/80 backdrop-blur-sm text-sm sm:text-base" size="sm" className="sm:size-default">
+                  <Icon name="Maximize2" size={14} className="mr-2 sm:size-4" />
+                  <span className="hidden sm:inline">Открыть полную карту</span>
+                  <span className="sm:hidden">Открыть карту</span>
                 </Button>
               </div>
             </div>
@@ -539,22 +582,22 @@ const Index = () => {
       </section>
 
       {/* Contacts Section */}
-      <section className="py-16 bg-gradient-to-r from-primary/5 to-accent/5">
+      <section className="py-12 sm:py-16 bg-gradient-to-r from-primary/5 to-accent/5">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold font-heading text-gray-800 mb-4">
+            <div className="text-center mb-8 sm:mb-12">
+              <h3 className="text-2xl sm:text-3xl font-bold font-heading text-gray-800 mb-4">
                 Свяжитесь с нами
               </h3>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600 px-4">
                 Готовы помочь найти идеальное жилье или ответить на ваши вопросы
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
               {/* Contact Cards */}
               <div className="space-y-6">
-                <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+                <Card className="p-4 sm:p-6 hover:shadow-lg transition-shadow duration-300">
                   <div className="flex items-center space-x-4">
                     <div className="bg-primary/10 p-3 rounded-full">
                       <Icon name="Phone" size={24} className="text-primary" />
@@ -572,7 +615,7 @@ const Index = () => {
                   </div>
                 </Card>
 
-                <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+                <Card className="p-4 sm:p-6 hover:shadow-lg transition-shadow duration-300">
                   <div className="flex items-center space-x-4">
                     <div className="bg-accent/10 p-3 rounded-full">
                       <Icon name="Mail" size={24} className="text-accent" />
@@ -590,7 +633,7 @@ const Index = () => {
                   </div>
                 </Card>
 
-                <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+                <Card className="p-4 sm:p-6 hover:shadow-lg transition-shadow duration-300">
                   <div className="flex items-center space-x-4">
                     <div className="bg-secondary/10 p-3 rounded-full">
                       <Icon name="MessageCircle" size={24} className="text-secondary" />
@@ -605,8 +648,8 @@ const Index = () => {
               </div>
 
               {/* Quick Contact Form */}
-              <Card className="p-6">
-                <h4 className="text-xl font-semibold text-gray-800 mb-4">Быстрая связь</h4>
+              <Card className="p-4 sm:p-6">
+                <h4 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Быстрая связь</h4>
                 <div className="space-y-4">
                   <Input placeholder="Ваше имя" />
                   <Input placeholder="Телефон" type="tel" />
@@ -627,9 +670,9 @@ const Index = () => {
             </div>
 
             {/* Additional Info */}
-            <div className="mt-12 text-center">
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="flex items-center justify-center space-x-8 text-sm text-gray-600">
+            <div className="mt-8 sm:mt-12 text-center">
+              <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-600">
                   <div className="flex items-center space-x-2">
                     <Icon name="Clock" size={16} />
                     <span>Быстрый ответ</span>
@@ -650,14 +693,14 @@ const Index = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold font-heading text-gray-800 mb-4">
+            <div className="text-center mb-8 sm:mb-12">
+              <h3 className="text-2xl sm:text-3xl font-bold font-heading text-gray-800 mb-4">
                 Часто задаваемые вопросы
               </h3>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600 px-4">
                 Ответы на самые популярные вопросы о аренде жилья в Сочи
               </p>
             </div>
@@ -665,10 +708,10 @@ const Index = () => {
             <Accordion type="single" collapsible className="space-y-4">
               {faqItems.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg border shadow-sm">
-                  <AccordionTrigger className="px-6 py-4 text-left hover:no-underline">
-                    <span className="font-medium text-gray-800">{item.question}</span>
+                  <AccordionTrigger className="px-4 sm:px-6 py-3 sm:py-4 text-left hover:no-underline">
+                    <span className="font-medium text-gray-800 text-sm sm:text-base pr-2">{item.question}</span>
                   </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 text-gray-600">
+                  <AccordionContent className="px-4 sm:px-6 pb-3 sm:pb-4 text-gray-600 text-sm sm:text-base">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -679,15 +722,15 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-secondary text-white py-12">
+      <footer className="bg-secondary text-white py-8 sm:py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Icon name="Home" size={24} className="text-accent" />
-                <h4 className="text-xl font-bold font-heading">СочиДом</h4>
+                <h4 className="text-lg sm:text-xl font-bold font-heading">СочиДом</h4>
               </div>
-              <p className="text-gray-300 mb-4">
+              <p className="text-sm sm:text-base text-gray-300 mb-4">
                 Лучшая платформа для поиска и аренды жилья в Сочи. Надежно, удобно, выгодно.
               </p>
               <div className="flex space-x-4">
@@ -698,8 +741,8 @@ const Index = () => {
             </div>
             
             <div>
-              <h5 className="font-semibold mb-4">Для гостей</h5>
-              <ul className="space-y-2 text-gray-300">
+              <h5 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Для гостей</h5>
+              <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
                 <li><a href="#" className="hover:text-accent transition-colors">Поиск жилья</a></li>
                 <li><a href="#" className="hover:text-accent transition-colors">Карта объектов</a></li>
                 <li><a href="#" className="hover:text-accent transition-colors">Отзывы</a></li>
@@ -708,8 +751,8 @@ const Index = () => {
             </div>
             
             <div>
-              <h5 className="font-semibold mb-4">Для владельцев</h5>
-              <ul className="space-y-2 text-gray-300">
+              <h5 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Для владельцев</h5>
+              <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
                 <li><a href="#" className="hover:text-accent transition-colors">Разместить объявление</a></li>
                 <li><a href="#" className="hover:text-accent transition-colors">Управление бронированиями</a></li>
                 <li><a href="#" className="hover:text-accent transition-colors">Аналитика</a></li>
@@ -736,8 +779,8 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="border-t border-gray-600 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 СочиДом. Все права защищены.</p>
+          <div className="border-t border-gray-600 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400">
+            <p className="text-sm sm:text-base">&copy; 2024 СочиДом. Все права защищены.</p>
           </div>
         </div>
       </footer>
