@@ -306,9 +306,190 @@ const Index = () => {
                     </div>
                   </div>
 
-                  <Button className="w-full mt-4 group-hover:bg-primary/90 transition-colors">
-                    Забронировать
-                  </Button>
+                  <div className="mt-4 space-y-2">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button className="w-full group-hover:bg-primary/90 transition-colors">
+                          Забронировать
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Бронирование жилья</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <h4 className="font-semibold text-gray-800">{property.title}</h4>
+                            <p className="text-sm text-gray-600">{property.district}</p>
+                            <div className="flex items-center justify-between mt-2">
+                              <span className="text-2xl font-bold text-primary">{property.price}₽</span>
+                              <span className="text-sm text-gray-500">за ночь</span>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-sm font-medium text-gray-700">Заезд</label>
+                              <Input type="date" className="mt-1" />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium text-gray-700">Выезд</label>
+                              <Input type="date" className="mt-1" />
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <label className="text-sm font-medium text-gray-700">Количество гостей</label>
+                            <Select>
+                              <SelectTrigger className="mt-1">
+                                <SelectValue placeholder="Выберите" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1">1 гость</SelectItem>
+                                <SelectItem value="2">2 гостя</SelectItem>
+                                <SelectItem value="3">3 гостя</SelectItem>
+                                <SelectItem value="4">4+ гостей</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="border-t pt-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <span>2 ночи × {property.price}₽</span>
+                              <span>{property.price * 2}₽</span>
+                            </div>
+                            <div className="flex items-center justify-between mb-2">
+                              <span>Сервисный сбор</span>
+                              <span>{Math.round(property.price * 0.1)}₽</span>
+                            </div>
+                            <div className="flex items-center justify-between font-bold text-lg border-t pt-2">
+                              <span>Итого</span>
+                              <span>{property.price * 2 + Math.round(property.price * 0.1)}₽</span>
+                            </div>
+                          </div>
+
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button className="w-full bg-primary hover:bg-primary/90">
+                                <Icon name="CreditCard" size={16} className="mr-2" />
+                                Перейти к оплате
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-lg">
+                              <DialogHeader>
+                                <DialogTitle>Способы оплаты</DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div className="bg-blue-50 p-4 rounded-lg">
+                                  <div className="flex items-center justify-between mb-3">
+                                    <span className="font-semibold">Итого к оплате:</span>
+                                    <span className="text-2xl font-bold text-primary">
+                                      {property.price * 2 + Math.round(property.price * 0.1)}₽
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-gray-600">Включает проживание и сервисный сбор</p>
+                                </div>
+
+                                <div className="space-y-3">
+                                  <h4 className="font-medium text-gray-800">Выберите способ оплаты:</h4>
+                                  
+                                  {/* Bank Cards */}
+                                  <Card className="p-4 cursor-pointer hover:bg-blue-50 transition-colors border-2 hover:border-blue-200">
+                                    <div className="flex items-center space-x-3">
+                                      <div className="bg-blue-100 p-2 rounded-lg">
+                                        <Icon name="CreditCard" size={20} className="text-blue-600" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <h5 className="font-medium">Банковская карта</h5>
+                                        <p className="text-sm text-gray-600">Visa, MasterCard, МИР</p>
+                                      </div>
+                                      <Badge className="bg-green-100 text-green-800">Мгновенно</Badge>
+                                    </div>
+                                  </Card>
+
+                                  {/* SBP */}
+                                  <Card className="p-4 cursor-pointer hover:bg-purple-50 transition-colors border-2 hover:border-purple-200">
+                                    <div className="flex items-center space-x-3">
+                                      <div className="bg-purple-100 p-2 rounded-lg">
+                                        <Icon name="Smartphone" size={20} className="text-purple-600" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <h5 className="font-medium">СБП (Система быстрых платежей)</h5>
+                                        <p className="text-sm text-gray-600">Переводы через мобильный банк</p>
+                                      </div>
+                                      <Badge className="bg-green-100 text-green-800">Без комиссии</Badge>
+                                    </div>
+                                  </Card>
+
+                                  {/* YooMoney */}
+                                  <Card className="p-4 cursor-pointer hover:bg-yellow-50 transition-colors border-2 hover:border-yellow-200">
+                                    <div className="flex items-center space-x-3">
+                                      <div className="bg-yellow-100 p-2 rounded-lg">
+                                        <Icon name="Wallet" size={20} className="text-yellow-600" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <h5 className="font-medium">ЮMoney</h5>
+                                        <p className="text-sm text-gray-600">Электронный кошелек</p>
+                                      </div>
+                                      <Badge className="bg-blue-100 text-blue-800">Быстро</Badge>
+                                    </div>
+                                  </Card>
+
+                                  {/* QIWI */}
+                                  <Card className="p-4 cursor-pointer hover:bg-orange-50 transition-colors border-2 hover:border-orange-200">
+                                    <div className="flex items-center space-x-3">
+                                      <div className="bg-orange-100 p-2 rounded-lg">
+                                        <Icon name="QrCode" size={20} className="text-orange-600" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <h5 className="font-medium">QIWI Кошелек</h5>
+                                        <p className="text-sm text-gray-600">Оплата через QR-код</p>
+                                      </div>
+                                      <Badge className="bg-green-100 text-green-800">Удобно</Badge>
+                                    </div>
+                                  </Card>
+
+                                  {/* Bank Transfer */}
+                                  <Card className="p-4 cursor-pointer hover:bg-gray-50 transition-colors border-2 hover:border-gray-200">
+                                    <div className="flex items-center space-x-3">
+                                      <div className="bg-gray-100 p-2 rounded-lg">
+                                        <Icon name="Building" size={20} className="text-gray-600" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <h5 className="font-medium">Банковский перевод</h5>
+                                        <p className="text-sm text-gray-600">Переводы на расчетный счет</p>
+                                      </div>
+                                      <Badge className="bg-gray-100 text-gray-800">1-2 дня</Badge>
+                                    </div>
+                                  </Card>
+                                </div>
+
+                                <div className="bg-green-50 p-4 rounded-lg">
+                                  <div className="flex items-center space-x-2 mb-2">
+                                    <Icon name="Shield" size={16} className="text-green-600" />
+                                    <span className="font-medium text-green-800">Безопасные платежи</span>
+                                  </div>
+                                  <p className="text-sm text-green-700">
+                                    Все платежи защищены SSL-шифрованием. Возврат средств при отмене бронирования.
+                                  </p>
+                                </div>
+
+                                <Button className="w-full bg-primary hover:bg-primary/90">
+                                  <Icon name="Lock" size={16} className="mr-2" />
+                                  Продолжить оплату
+                                </Button>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    
+                    <Button variant="outline" className="w-full text-sm">
+                      <Icon name="Heart" size={14} className="mr-2" />
+                      В избранное
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
