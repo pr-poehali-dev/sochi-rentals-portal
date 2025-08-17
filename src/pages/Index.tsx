@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +13,7 @@ import { Calendar } from '@/components/ui/calendar';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [propertyType, setPropertyType] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
@@ -351,7 +353,7 @@ const Index = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {filteredProperties.map((property) => (
               <Card key={property.id} className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="relative">
+                <div className="relative cursor-pointer" onClick={() => navigate(`/property/${property.id}`)}>
                   <img
                     src={property.image}
                     alt={property.title}
@@ -360,13 +362,16 @@ const Index = () => {
                   <Badge className="absolute top-4 left-4 bg-white text-gray-800">
                     {property.type}
                   </Badge>
-                  <div className="absolute top-4 right-4 bg-white/90 rounded-full p-2">
+                  <div className="absolute top-4 right-4 bg-white/90 rounded-full p-2" onClick={(e) => e.stopPropagation()}>
                     <Icon name="Heart" size={16} className="text-gray-600 hover:text-red-500 cursor-pointer" />
                   </div>
                 </div>
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-start justify-between mb-3">
-                    <h4 className="text-base sm:text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors line-clamp-2">
+                    <h4 
+                      className="text-base sm:text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors line-clamp-2 cursor-pointer"
+                      onClick={() => navigate(`/property/${property.id}`)}
+                    >
                       {property.title}
                     </h4>
                     <div className="flex items-center space-x-1">
