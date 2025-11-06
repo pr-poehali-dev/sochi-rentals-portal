@@ -11,6 +11,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import Icon from '@/components/ui/icon';
+import FloatingContact from '@/components/FloatingContact';
+import CallToAction from '@/components/CallToAction';
+import SeoContent from '@/components/SeoContent';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -22,6 +25,10 @@ const Index = () => {
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
   const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
   const [guests, setGuests] = useState(1);
+
+  React.useEffect(() => {
+    document.title = 'Аренда жилья в Сочи посуточно — квартиры, дома, виллы у моря | СочиДом';
+  }, []);
   
   // Генерируем занятые даты для каждого объекта
   const generateBookedDates = (propertyId: number) => {
@@ -266,11 +273,11 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading text-gray-800 mb-4 sm:mb-6">
-            Найдите идеальное жилье в Сочи
-          </h2>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading text-gray-800 mb-4 sm:mb-6">
+            Аренда жилья в Сочи посуточно
+          </h1>
           <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-            Более 1000 проверенных объектов для аренды. От уютных студий до роскошных вилл с видом на море.
+            Более 500 проверенных объектов для аренды. Квартиры от 2200₽, дома с бассейном, виллы у моря. Прямые контакты владельцев.
           </p>
           
           {/* Search Section */}
@@ -922,6 +929,13 @@ const Index = () => {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto px-4">
+          <CallToAction />
+        </div>
+      </section>
+
       {/* Contacts Section */}
       <section className="py-12 sm:py-16 bg-gradient-to-r from-primary/5 to-accent/5">
         <div className="container mx-auto px-4">
@@ -1033,8 +1047,11 @@ const Index = () => {
         </div>
       </section>
 
+      {/* SEO Content */}
+      <SeoContent />
+
       {/* FAQ Section */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8 sm:mb-12">
@@ -1125,6 +1142,8 @@ const Index = () => {
           </div>
         </div>
       </footer>
+      
+      <FloatingContact />
     </div>
   );
 };
