@@ -4,9 +4,6 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-User-agent: Yandex
-Allow: /
-
 User-agent: Twitterbot
 Allow: /
 
@@ -15,5 +12,3 @@ Allow: /
 
 User-agent: *
 Allow: /
-
-Sitemap: https://sochi-rentals.poehali.dev/sitemap.xml
