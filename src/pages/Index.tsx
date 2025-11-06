@@ -11,8 +11,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import Icon from '@/components/ui/icon';
-import SochiMap from '@/components/SochiMap';
-import CallToAction from '@/components/CallToAction';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -885,14 +883,42 @@ const Index = () => {
       {/* Interactive Map Section */}
       <section className="py-12 sm:py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <SochiMap />
-        </div>
-      </section>
-
-      {/* Call to Action Section */}
-      <section className="py-12 sm:py-16">
-        <div className="container mx-auto px-4">
-          <CallToAction />
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-2xl sm:text-3xl font-bold font-heading text-gray-800 mb-4">
+              Карта объектов в Сочи
+            </h3>
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4">
+              Изучите расположение доступного жилья на интерактивной карте города
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-xl lg:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
+            <div className="bg-gradient-to-br from-blue-100 to-green-100 rounded-lg lg:rounded-xl h-64 sm:h-80 lg:h-96 flex items-center justify-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-200/30 to-green-200/30"></div>
+              <div className="text-center z-10">
+                <Icon name="Map" size={64} className="text-primary mx-auto mb-4" />
+                <h4 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Интерактивная карта Сочи</h4>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-4">Здесь будет отображена карта с объектами недвижимости</p>
+                
+                {/* Mock map points */}
+                <div className="absolute top-8 left-8 bg-primary text-white rounded-full p-2 animate-pulse">
+                  <Icon name="MapPin" size={16} />
+                </div>
+                <div className="absolute top-16 right-16 bg-accent text-white rounded-full p-2 animate-pulse">
+                  <Icon name="MapPin" size={16} />
+                </div>
+                <div className="absolute bottom-12 left-1/3 bg-secondary text-white rounded-full p-2 animate-pulse">
+                  <Icon name="MapPin" size={16} />
+                </div>
+                
+                <Button variant="outline" className="bg-white/80 backdrop-blur-sm text-sm sm:text-base" size="sm" className="sm:size-default">
+                  <Icon name="Maximize2" size={14} className="mr-2 sm:size-4" />
+                  <span className="hidden sm:inline">Открыть полную карту</span>
+                  <span className="sm:hidden">Открыть карту</span>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
